@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable, Mapping, cast
 
 import pandas as pd
 import yaml
@@ -15,23 +15,26 @@ from wkr.data.common import (
 )
 
 
-def load_config(path: Path) -> dict:
+def load_config(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
-        return yaml.safe_load(handle)
+        return cast(dict[str, Any], yaml.safe_load(handle))
 
 
 def _iter_csv_chunks(path: Path, chunksize: int = 200_000) -> Iterable[pd.DataFrame]:
-    return pd.read_csv(path, chunksize=chunksize)
+    return cast(Iterable[pd.DataFrame], pd.read_csv(path, chunksize=chunksize))
 
 
-def _build_mapping(mapping_dict: dict, level_override: str | None = None) -> MappingConfig:
-    mapping = mapping_dict.copy()
+def _build_mapping(
+    mapping_dict: Mapping[str, Any],
+    level_override: str | None = None,
+) -> MappingConfig:
+    mapping = dict(mapping_dict)
     if level_override is not None:
         mapping["entity_id"] = mapping.get("entity_id", "entity_id")
     return MappingConfig(**mapping)
 
 
-def preprocess_google(raw_path: Path, config: dict) -> pd.DataFrame:
+def preprocess_google(raw_path: Path, config: Mapping[str, Any]) -> pd.DataFrame:
     mapping = _build_mapping(config["google"]["mapping"])
     window = config["aggregation"]["window"]
     unit = config["aggregation"]["timestamp_unit"]
@@ -44,7 +47,7 @@ def preprocess_google(raw_path: Path, config: dict) -> pd.DataFrame:
     return concat_frames(frames)
 
 
-def preprocess_alibaba(raw_path: Path, config: dict) -> pd.DataFrame:
+def preprocess_alibaba(raw_path: Path, config: Mapping[str, Any]) -> pd.DataFrame:
     level = config["alibaba"]["level"]
     mapping = _build_mapping(config["alibaba"]["mapping"], level_override=level)
     window = config["aggregation"]["window"]
@@ -59,7 +62,7 @@ def preprocess_alibaba(raw_path: Path, config: dict) -> pd.DataFrame:
     return concat_frames(frames)
 
 
-def preprocess_bitbrains(raw_path: Path, config: dict) -> pd.DataFrame:
+def preprocess_bitbrains(raw_path: Path, config: Mapping[str, Any]) -> pd.DataFrame:
     mapping = _build_mapping(config["bitbrains"]["mapping"])
     window = config["aggregation"]["window"]
     unit = config["aggregation"]["timestamp_unit"]

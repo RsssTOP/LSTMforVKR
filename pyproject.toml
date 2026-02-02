@@ -26,10 +26,16 @@ line-length = 88
 
 [tool.isort]
 profile = "black"
+known_first_party = ["wkr"]
 
 [tool.ruff]
 line-length = 88
+
+[tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["wkr"]
 
 [tool.mypy]
 python_version = "3.11"

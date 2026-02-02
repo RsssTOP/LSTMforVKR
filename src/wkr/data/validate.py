@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
 
 import pandas as pd
 
 
-def validate_dataset(df: pd.DataFrame) -> dict:
+def validate_dataset(df: pd.DataFrame) -> dict[str, Any]:
     missing = df.isna().sum().to_dict()
     negatives = {
         "cpu_usage": int((df["cpu_usage"] < 0).sum()),
@@ -27,6 +28,6 @@ def validate_dataset(df: pd.DataFrame) -> dict:
     }
 
 
-def save_report(report: dict, output_path: Path) -> None:
+def save_report(report: dict[str, Any], output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(report, indent=2), encoding="utf-8")

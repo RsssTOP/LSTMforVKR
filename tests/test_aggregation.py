@@ -1,4 +1,5 @@
 import pandas as pd
+import pytest
 
 from wkr.data.common import aggregate_time_series
 
@@ -22,5 +23,5 @@ def test_aggregate_time_series():
 
     m1_rows = aggregated[aggregated["entity_id"] == "m1"]
     assert len(m1_rows) == 1
-    assert m1_rows["cpu_usage"].iloc[0] == 0.6
-    assert m1_rows["mem_usage"].iloc[0] == 0.3
+    assert m1_rows["cpu_usage"].iloc[0] == pytest.approx(0.6)
+    assert m1_rows["mem_usage"].iloc[0] == pytest.approx(0.3)
