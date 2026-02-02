@@ -1,0 +1,42 @@
+paths:
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+
+aggregation:
+  window: "5min"
+  timestamp_unit: "s"
+
+features:
+  - cpu_usage
+  - mem_usage
+  - disk_io
+  - net_io
+
+alibaba:
+  level: "machine"
+  mapping:
+    timestamp: "time"
+    entity_id: "machine_id"
+    cpu_usage: "cpu_usage"
+    mem_usage: "mem_usage"
+    disk_io: "disk_io"
+    net_io: "net_io"
+
+google:
+  mapping:
+    timestamp: "timestamp"
+    entity_id: "machine_id"
+    cpu_usage: "cpu_usage"
+    mem_usage: "mem_usage"
+    disk_io: "disk_io"
+    net_io: "net_io"
+
+bitbrains:
+  mapping:
+    timestamp: "timestamp"
+    entity_id: "vm_id"
+    cpu_usage: "cpu_usage"
+    mem_usage: "mem_usage"
+    disk_io: "disk_io"
+    net_io: "net_io"
